@@ -7,8 +7,8 @@ init:
         linear 0.05 xoffset -2 yoffset 2
         repeat
     transform left_corner:
-        xalign 0.0
-        yalign 0.0
+        xalign 0.3
+        yalign 1.0
     transform right_corner:
         xalign 1.0
         yalign 0.0
@@ -16,24 +16,29 @@ init:
 
 # Определение персонажей игры.
 define I = Character('Игорина', color="#69380096")
-define V = Character("Варпач", color="#ff9e2f96")
+define V = Character("Варпач", color="#ff9e2f96", image="varpach basic")
 define S = Character("Серёга", color="#685c4f05")
 define R = Character("Руслан", color="#00e1ffff")
 define Unknown = Character("???", color="#ffffff")
 
+# Characters
+image Varpach = "Characters/Varpach.png"
 
+# CHR Icons (not working ATM)
+image define varpach basic = "Characters/Varpach.png"
+
+# Backgrounds
 image Igorexa = "images/Igorexa.jpg"
-image bg RuslanRoom = "images/RuslanRoom.jpg"
-image bg RuslanRoom blurred = im.Blur("images/RuslanRoom.jpg", 3)
-image bg RuslanBathroom = "RuslanBathroom.jpg"
-image bg MetroEnter = "MetroStart.jpg"
-image bg MetroExit = "MetroExit.jpg"
-image bg CollegeEnter = "CollegeEnter.jpg"
-image bg Corridor = "Corridor.jpg"
-image bg AltCorridor = "AltCOrridor.jpg"
-image bg Floor = im.Blur("Floor.png", 2)
-image bg EyeRuslanRoom = im.Blur("EyeRuslanRoom.jpg", 3)
-image Varpach = "Varpach.png"
+image bg RuslanRoom = "Backgrounds/RuslanRoom.jpg"
+image bg RuslanBathroom = "Backgrounds/RuslanBathroom.jpg"
+image bg MetroEnter = "Backgrounds/MetroStart.jpg"
+image bg MetroExit = "Backgrounds/MetroExit.jpg"
+image bg CollegeEnter = "Backgrounds/CollegeEnter.jpg"
+image bg Corridor = "Backgrounds/Corridor.jpg"
+image bg AltCorridor = "Backgrounds/AltCOrridor.jpg"
+image bg Floor b = im.Blur("Backgrounds/Floor.png", 2)
+image bg EyeRuslanRoom = im.Blur("Backgrounds/EyeRuslanRoom.jpg", 3)
+
 
 
 default affection_igorina = 0
@@ -110,7 +115,7 @@ label College:
     Unknown "— Фраерок, топай сюда."
     "Точно. Это был Варпач."
     # Смена спрайта Unknown на Варпача
-    show Varpach at left_corner with fade
+    show Varpach at left_corner with dissolve
     "Его манеру речи тяжело спутать с кем-то иным."
     "Сначала и не узнал, голос охрип."
     R "Чего хрипишь, как старый дед?"
@@ -173,7 +178,7 @@ label College:
             # МИНИ-ИГРА! 
             # Нужно поместить учебники в одну сторону, а тетради в другую. 
             # По окончанию начнется диалог.
-            scene bg Floor with fade
+            scene bg Floor b with fade
             call screen sorting_game
 
             jump Helped_Igorina
