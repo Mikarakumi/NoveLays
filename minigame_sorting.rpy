@@ -1,53 +1,58 @@
 # ==============================
-# МИНИ-ИГРА: Drag & Drop сортировка
+# МИНИ-ИГРА: Drag & Drop сортировка (с картинками)
 # ==============================
 
 init python:
     import pygame
     import random
+    import os
 
     # Все возможные предметы (каждый раз рандомно выбираются 3+3)
+    # Формат: (название, тип, имя_файла_изображения)
     ALL_ITEMS = [
-        ("Учебник математики", "book"),
-        ("Учебник истории",    "book"),
-        ("Учебник биологии",   "book"),
-        ("Учебник физики",     "book"),
-        ("Учебник химии",      "book"),
-        ("Тетрадь по физике",  "notebook"),
-        ("Тетрадь по химии",   "notebook"),
-        ("Тетрадь по русскому","notebook"),
-        ("Тетрадь по алгебре", "notebook"),
-        ("Тетрадь по истории", "notebook"),
+        ("Учебник математики", "book", "MathBook"),
+        ("Учебник истории",    "book", "HistoryBook"),
+        ("Учебник биологии",   "book", "BiologyBook"),
+        ("Учебник физики",     "book", "PhysicsBook"),
+        ("Учебник химии",      "book", "ChemBook"),
+        ("Тетрадь по физике",  "notebook", "PhysNB"),
+        ("Тетрадь по химии",   "notebook", "ChemNB"),
+        ("Тетрадь по русскому","notebook", "RusNB"),
+        ("Тетрадь по алгебре", "notebook", "MathNB"),
+        ("Тетрадь по истории", "notebook", "HistNB"),
     ]
 
     # --------------------------------------------------
     class DragItem:
-        """Одна перетаскиваемая карточка"""
-        def __init__(self, name, item_type, x, y):
-            self.name      = name
-            self.item_type = item_type   # "book" или "notebook"
-            self.x         = float(x)
-            self.y         = float(y)
-            self.start_x   = float(x)   # стартовая позиция — для возврата
-            self.start_y   = float(y)
-            self.dragging  = False
-            self.sorted    = False       # True = брошена в правильную зону
-            self.wrong     = False       # True = мигает красным (ошибка)
-            self.wrong_time = 0.0        # момент ошибки
+        """Одна перетаскиваемая карточка с изображением"""
+        def __init__(self, name, item_type, image_path, x, y, card_w, card_h):
+            self.name = name
+            self.item_type = item_type
+            self.image = Image(image_path)
+            self.x = float(x)
+            self.y = float(y)
+            self.start_x = float(x)
+            self.start_y = float(y)
+            self.card_w = card_w          # ширина карточки (для хитбокса)
+            self.card_h = card_h          # высота карточки
+            self.dragging = False
+            self.sorted = False
+            self.wrong = False
+            self.wrong_time = 0.0
 
         def contains(self, mx, my):
             """Курсор попадает в карточку?"""
-            return abs(mx - self.x) < 70 and abs(my - self.y) < 35
+            return abs(mx - self.x) < self.card_w // 2 and abs(my - self.y) < self.card_h // 2
 
     # --------------------------------------------------
     class SortingGame(renpy.Displayable):
 
         SCR_W  = 1920
         SCR_H  = 1080
-        ZONE_W = 200
+        ZONE_W = 400
         ZONE_H = 420
-        CARD_W = 150
-        CARD_H = 70
+        CARD_W = 244
+        CARD_H = 308
 
         def __init__(self):
             super(SortingGame, self).__init__()
@@ -62,14 +67,19 @@ init python:
             cx = self.SCR_W // 2
             cy = self.SCR_H // 2
             positions = [
-                (cx - 170, cy - 60), (cx, cy - 60), (cx + 170, cy - 60),
-                (cx - 170, cy + 60), (cx, cy + 60), (cx + 170, cy + 60),
+                (cx - 300, cy - 300), (cx, cy - 300), (cx + 300, cy - 300),
+                (cx - 300, cy + 100), (cx, cy + 100), (cx + 300, cy + 100),
             ]
 
-            self.items = [
-                DragItem(name, itype, px, py)
-                for (name, itype), (px, py) in zip(selected, positions)
-            ]
+            # Создаём объекты карточек с изображениями
+            self.items = []
+            for (name, itype, img_name), (px, py) in zip(selected, positions):
+                # Путь к изображению (папка images в game)
+                img_path = f"images/Minigame/{img_name}.png"
+                # Если файла нет, используем заглушку
+                if not renpy.loadable(img_path):
+                    img_path = "images/default_card.png"
+                self.items.append(DragItem(name, itype, img_path, px, py, self.CARD_W, self.CARD_H))
 
             self.dragged     = None
             self.drag_off_x  = 0.0
@@ -95,7 +105,7 @@ init python:
             r = renpy.Render(width, height)
             c = r.canvas()
 
-            # Фон
+            # Фон (опционально, можно заменить на свой)
             # c.rect((20, 20, 40), (0, 0, width, height))
 
             # Зона учебников (слева)
@@ -120,15 +130,16 @@ init python:
 
             # Подсказка
             self._text(r, "Перетащи каждый предмет в нужную зону",
-                    width // 2, height - 28, 18, (120, 120, 120))
+                    width // 2, height - 140, 36, (255, 255, 255))
 
-            # Карточки (сначала не тащимые, потом тащимую — поверх)
+            # Рисуем все карточки, кроме перетаскиваемой (чтобы она была сверху)
             for item in self.items:
                 if not item.sorted and not item.dragging:
-                    self._draw_card(r, c, item, st)
+                    self._draw_card(r, item, st)
 
+            # Рисуем перетаскиваемую карточку поверх
             if self.dragged:
-                self._draw_card(r, c, self.dragged, st, shadow=True)
+                self._draw_card(r, self.dragged, st, shadow=True)
 
             # Финальный оверлей
             if self.done:
@@ -145,33 +156,25 @@ init python:
             renpy.redraw(self, 0)
             return r
 
-        # ---- Рисовка одной карточки ------------------------
-        def _draw_card(self, render, canvas, item, st, shadow=False):
+        # ---- Рисовка одной карточки (с изображением) -------
+        def _draw_card(self, render_obj, item, st, shadow=False):
             hw = self.CARD_W // 2
             hh = self.CARD_H // 2
             ix = int(item.x)
             iy = int(item.y)
 
-            # Тень при перетаскивании
-            if shadow:
-                canvas.rect((0, 0, 0, 120),
-                            (ix - hw + 6, iy - hh + 6, self.CARD_W, self.CARD_H))
+            # Масштабируем изображение под размер карточки
+            scaled_img = Transform(item.image, size=(self.CARD_W, self.CARD_H), fit="contain")
+            img_rend = renpy.render(scaled_img, self.CARD_W, self.CARD_H, st, 0.0)
+            render_obj.blit(img_rend, (ix - hw, iy - hh))
 
-            # Мигание при ошибке
+            # Мигание красным при ошибке
             blink = item.wrong and (int(st * 7) % 2 == 0)
             if blink:
-                bg = (180, 40, 40)
-            elif item.item_type == "book":
-                bg = (40, 80, 150)
-            else:
-                bg = (100, 40, 150)
-
-            canvas.rect(bg, (ix - hw, iy - hh, self.CARD_W, self.CARD_H))
-            canvas.rect((220, 220, 220),
-                        (ix - hw, iy - hh, self.CARD_W, self.CARD_H), 2)
-
-            # Название предмета
-            self._text(render, item.name, ix, iy, 18, (255, 255, 255))
+                overlay = renpy.Render(self.CARD_W, self.CARD_H)
+                overlay_canvas = overlay.canvas()
+                overlay_canvas.rect((255, 0, 0, 120), (0, 0, self.CARD_W, self.CARD_H))
+                render_obj.blit(overlay, (ix - hw, iy - hh))
 
             # Сброс мигания через ~0.6 сек
             if item.wrong and (st - item.wrong_time) > 0.6:
@@ -179,7 +182,7 @@ init python:
 
         # ---- Текст -----------------------------------------
         def _text(self, render, text, cx, cy, size, color):
-            td = Text(text, size=size, color=color)
+            td = Text(text, size=size, color=color, outlines=[(1, "#000", 0, 0)])
             tw, th = td.render(900, 80, 0, 0).get_size()
             render.blit(
                 td.render(900, 80, 0, 0),
@@ -259,7 +262,7 @@ screen sorting_game():
     add SortingGame() xalign 0.5 yalign 0.5
 
 label sorting_minigame:
-    call screen sorting_Game
+    call screen sorting_game
     $ _errors = ui.interact(_game)
 
     if _errors == 0:
