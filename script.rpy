@@ -1,9 +1,18 @@
 ﻿# Вы можете расположить сценарий своей игры в этом файле.
 init python:
     import pygame
-    # def changeMood(character, mood):
-    #     renpy.hide(character)
-    #     renpy.show(character, mood)
+init:
+    transform shake_text:
+        linear 0.05 xoffset 2 yoffset -2
+        linear 0.05 xoffset -2 yoffset 2
+        repeat
+    transform left_corner:
+        xalign 0.0
+        yalign 0.0
+    transform right_corner:
+        xalign 1.0
+        yalign 0.0
+
 
 # Определение персонажей игры.
 define I = Character('Игорина', color="#69380096")
@@ -26,30 +35,18 @@ image bg Floor = im.Blur("Floor.png", 2)
 image bg EyeRuslanRoom = im.Blur("EyeRuslanRoom.jpg", 3)
 image Varpach = "Varpach.png"
 
-transform left_corner:
-    xalign 0.0
-    yalign 0.0
-transform right_corner:
-    xalign 1.0
-    yalign 0.0
 
 default affection_igorina = 0
 
 # Глава I. Пробуждение
 
 label start:
-    # play music "audio/background/First.mp3" fadein 1.0 volume 0.75
-    # show Igorexa basic
-    # i "{i}(Вздыхает){/i}"
-    # i "Вот уже двадцать три года я одна. Рост — сто восемьдесят семь сантиметров. Парни проходят мимо, как будто я не девушка, а пожарная вышка."
-    # # centered ==> для вывода текста в центр экрана
-    # with fade 
-    
     # Черный экран на фоне
     "Перед глазами пустота..."
     "Здесь так темно, но одновременно с этим и уютно."
     "Сознание балансирует на грани сна и реальности."
-    "Сегодняшний день будет таким же, как и всегда."
+    
+    "{sc}Сегодняшний день будет таким же, как и всегда.{/sc}"
     "Повторение одного и того же из раза в раз."
     "..."
     # Глаза открываются, картинка размыта
