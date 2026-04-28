@@ -10,33 +10,41 @@ init:
         xalign 0.3
         yalign 1.0
     transform right_corner:
-        xalign 1.0
-        yalign 0.0
+        xalign 0.7
+        yalign 1.0
+    transform classroom_stand:
+        xalign 0.45
+        yalign 2.0
+
 
 
 # Определение персонажей игры.
 define I = Character('Игорина', color="#69380096")
 define V = Character("Варпач", color="#ff9e2f96")
-<<<<<<< HEAD
-define S = Character("Серега", color="#685c4f05")
-=======
 define S = Character("Серега", color="#c61400ff")
->>>>>>> 307165927a8e79ac9a72c2fca8608e402cbaf7e5
 define R = Character("Руслан", color="#00e1ffff")
 define K = Character("Ковалева", color="#ffb011ff")
 
 define Unknown = Character("???", color="#ffffff")
 
 # Characters
-    # Варпач
+        # Варпач
 image Varpach Base = "Characters/Varpach_Base.png"
-image Varpach Stand = "Characters/Varpach_Stand.png"
-    # Игорина
+image Varpach Stand:
+    "Characters/Varpach_Stand.png"
+    zoom 1.35
+        # Игорина
 image Igorexa = "Characters/Igorexa.jpg"
-image Igorina Base = "Characters/Igorina_Base.png"
-image Igorina Shy = "Characters/Igorina_Shy.png"
-    # Серега
-image Serega Base = "Characters/Serega_Base.png"
+image Igorina Base:
+    "Characters/Igorina_Base.png"
+    zoom 0.9
+image Igorina Shy:
+    "Characters/Igorina_Shy.png"
+    zoom 0.9
+        # Серега
+image Serega Base:
+    "Characters/Serega_Base.png"
+    zoom 1.3
 image Serega Strong = "Characters/Serega_Strong.jpg"
 
 # CHR Icons (not working ATM)
@@ -61,6 +69,8 @@ image bg EmptyMathClass = "Backgrounds/EmptyMathClass.png"
 
 label start:
     # Черный экран на фоне
+    scene black
+    centered "{fi}{cps=10}Глава I. Пробуждение"
     "Перед глазами пустота..."
     "Здесь так темно, но одновременно с этим и уютно."
     "Сознание балансирует на грани сна и реальности."
@@ -119,9 +129,11 @@ label start:
 
 # Глава II. Колледж
 label College:
-    "..."
+    scene black
+    centered "{fi}{cps=10}Глава II. Колледж"
     # (Действие в коридоре колледжа)
     scene bg Corridor with fade
+    "..."
     Unknown "— Ну-ка останавливаемся! Куда пошел?"
     "Меня окликнул какой-то голос."
     "Он был мне знаком, но в тоже время какой-то хрипловатый."
@@ -234,11 +246,13 @@ label after_1help_choice:
     "Простые функции размышления отключились, когда с нами заговорила девушка."
     R "Просто Руслан."
     I "Приятно познакомиться, Руслан. "
-    # Сцена медленно темнеет
-    hide Igor
+    
 
 # Глава III. Пары
 label Chapter_3:
+    scene black
+    centered "{fi}{cps=10}Глава III. {sc}Пары" 
+    scene bg AltCorridor with dissolve
     "..."
     "Мы разминулись спустя какое-то время."
     "Правда вот из моей головы не выходит её улыбка."
@@ -293,7 +307,7 @@ label Chapter_3:
         "Голос знакомый, сегодня мы с ним уже пересекались."
         "Мои веки раскрылись, кабинет пустовал."
         scene bg EmptyMathClass with fade
-        show Varpach Stand at left_corner with dissolve
+        show Varpach Stand at classroom_stand with dissolve
         "Рядом со мной был только Варпач."
         R "Как давно я сплю?"
         V "Не могу точно сказать, сам подошел только к середине."
@@ -314,12 +328,7 @@ label Chapter_3:
         "Но все хорошое и плохое, рано или поздно кончается."
         "Пора идти на следующую пару."
         "На сегодня она была последней."
-<<<<<<< HEAD
-        # или лучше сюда
-        # hide Varpach with dissolve
-=======
         hide Varpach Stand with dissolve
->>>>>>> 307165927a8e79ac9a72c2fca8608e402cbaf7e5
         "Варпач первым подорвался и вышел из кабинета, оставляя меня в одиночестве."
         "Скоро кабинет наполнится новой партией студентов."
     else:
@@ -344,15 +353,11 @@ label Chapter_3:
     "Кулаки даже инстинктивно сжались, брови нахмурились."
     "Как дальше развивался диалог я не услышал."
     "Погрузился в собственные мысли."
-<<<<<<< HEAD
-    # появляется серёга
-=======
     show Serega Base at right_corner with dissolve
->>>>>>> 307165927a8e79ac9a72c2fca8608e402cbaf7e5
     S "Эй, деваха, ты же знаешь, да?"
-    S "Очки носить это только для этих - леваков!"
+    S "Чулочки носить это только для этих - леваков!"
     S "Ты что, из этих, да? Ты?"
     "Этот силач{cps=5}...{/cps} {sc}Серега!" with hpunch
-    "(КОНЕЦ 3 ГЛАВЫ)"
-    show Serega Base at right_corner with dissolve
+    scene black
+    centered "{fi}(КОНЕЦ 3 ГЛАВЫ)"
 
