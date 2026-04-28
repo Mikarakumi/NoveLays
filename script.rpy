@@ -16,20 +16,21 @@ init:
 
 # Определение персонажей игры.
 define I = Character('Игорина', color="#69380096")
-define V = Character("Варпач", color="#ff9e2f96", image="varpach basic")
-define S = Character("Серёга", color="#685c4f05")
+define V = Character("Варпач", color="#ff9e2f96")
+define S = Character("Серега", color="#c61400ff")
 define R = Character("Руслан", color="#00e1ffff")
 define K = Character("Ковалева", color="#ffb011ff")
 define Unknown = Character("???", color="#ffffff")
 
 # Characters
 image Varpach = "Characters/Varpach.png"
+image Igorexa = "images/Characters/Igorexa.jpg"
 
 # CHR Icons (not working ATM)
 image define varpach basic = "Characters/Varpach.png"
 
 # Backgrounds
-image Igorexa = "images/Characters/Igorexa.jpg"
+
 image bg RuslanRoom = "Backgrounds/RuslanRoom.jpg"
 image bg RuslanBathroom = "Backgrounds/RuslanBathroom.jpg"
 image bg MetroEnter = "Backgrounds/MetroStart.jpg"
@@ -275,7 +276,7 @@ label Chapter_3:
         "Меня сильно тряхнули за плечо."
         "Голос знакомый, сегодня мы с ним уже пересекались."
         "Мои веки раскрылись, кабинет пустовал."
-        show Varpach with fade
+        show Varpach with fade 
         "Рядом со мной был только Варпач."
         R "Как давно я сплю?"
         V "Не могу точно сказать, сам подошел только к середине."
@@ -295,6 +296,7 @@ label Chapter_3:
         "Но все хорошое и плохое, рано или поздно кончается."
         "Пора идти на следующую пару."
         "На сегодня она была последней."
+        hide Varpach with dissolve
         "Варпач первым подорвался и вышел из кабинета, оставляя меня в одиночестве."
         "Скоро кабинет наполнится новой партией студентов."
     else:
