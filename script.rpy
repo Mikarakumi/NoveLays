@@ -23,8 +23,16 @@ define K = Character("Ковалева", color="#ffb011ff")
 define Unknown = Character("???", color="#ffffff")
 
 # Characters
-image Varpach = "Characters/Varpach.png"
-image Igorexa = "images/Characters/Igorexa.jpg"
+    # Варпач
+image Varpach Base = "Characters/Varpach_Base.png"
+image Varpach Stand = "Characters/Varpach_Stand.png"
+    # Игорина
+image Igorexa = "Characters/Igorexa.jpg"
+image Igorina Base = "Characters/Igorina_Base.png"
+image Igorina Shy = "Characters/Igorina_Shy.png"
+    # Серега
+image Serega Base = "Characters/Serega_Base.png"
+image Serega Strong = "Characters/Serega_Strong.jpg"
 
 # CHR Icons (not working ATM)
 image define varpach basic = "Characters/Varpach.png"
@@ -40,7 +48,8 @@ image bg Corridor = "Backgrounds/Corridor.jpg"
 image bg AltCorridor = "Backgrounds/AltCOrridor.jpg"
 image bg Floor b = im.Blur("Backgrounds/Floor.png", 2)
 image bg EyeRuslanRoom = im.Blur("Backgrounds/EyeRuslanRoom.jpg", 3)
-
+image bg MathClass = "Backgrounds/MathClass.png"
+image bg EmptyMathClass = "Backgrounds/EmptyMathClass.png"
 
 
 # Глава I. Пробуждение
@@ -115,7 +124,7 @@ label College:
     Unknown "— Фраерок, топай сюда."
     "Точно. Это был Варпач."
     # Смена спрайта Unknown на Варпача
-    show Varpach at left_corner with dissolve
+    show Varpach Base at left_corner with dissolve
     "Его манеру речи тяжело спутать с кем-то иным."
     "Сначала и не узнал, голос охрип."
     R "Чего хрипишь, как старый дед?"
@@ -146,7 +155,7 @@ label College:
             "Конечно, ведь не мне губить своё здоровье."
             "Варпач уже успел куда-то уйти."
     ""
-    hide Varpach with fade
+    hide Varpach Base with fade
     "..."
     # (Действие переходит в другой коридор)
     scene bg AltCorridor with fade
@@ -154,9 +163,9 @@ label College:
     "Поворот, и потом еще один поворот."
     "..."
     # (В поле зрения появляется Игорина)
-    show Igorexa
     "Не сразу я понял, что произошло."
-    "В мою грудь что-то ударилось."
+    show Igorina Base with dissolve
+    "В мою грудь что-то ударилось." with hpunch
     "Совсем лёгкое и невесомое."
     "После этого послышался глухой стук."
     R "Ты в порядке?"
@@ -194,7 +203,7 @@ label College:
             
 label Helped_Igorina:
     scene bg AltCorridor
-    show Igorexa
+    show Igorina Shy
     Unknown "Спасибо большое!"
     Unknown "Не знаю сколько бы тут ползала, пытаясь все собрать."
     R "Не за что, я вполне хорошо справляюсь с такими заданиями!"
@@ -212,6 +221,7 @@ label Helped_Igorina:
     jump after_1help_choice
      
 label after_1help_choice:
+    show Igorina Base
     I "Меня Игорина зовут."
     I "А тебя как?"
     I "Могу ли я узнать твое имя и ещё кое-что?"
@@ -220,7 +230,7 @@ label after_1help_choice:
     R "Просто Руслан."
     I "Приятно познакомиться, Руслан. "
     # Сцена медленно темнеет
-    hide Igorexa
+    hide Igor
 
 # Глава III. Пары
 label Chapter_3:
@@ -232,6 +242,7 @@ label Chapter_3:
     "Черт! Хватит. Ты забываешь, Руслан."
     "В этой среде выживает сильнейший!"
     # show bg кабинет математики
+    scene bg MathClass with fade
     "..."
     "Мы разминулись в коридоре, когда я подсказал ей где находится кабинет физики."
     "Знаю даже преподавателя, что чуть не завалил меня в прошлом году."
@@ -261,7 +272,7 @@ label Chapter_3:
 
     # МИНИ-ИГРА 
 
-
+    scene black with fade
     "Последнее, что уловил мой слух."
     "Какие-то разговоры про цикличность, день сурка, повторы и возвращения."
     "В следующий раз лягу спать пораньше, а то буду засыпать на каждой лекции."
@@ -276,7 +287,8 @@ label Chapter_3:
         "Меня сильно тряхнули за плечо."
         "Голос знакомый, сегодня мы с ним уже пересекались."
         "Мои веки раскрылись, кабинет пустовал."
-        show Varpach with fade 
+        scene bg EmptyMathClass with fade
+        show Varpach Stand at left_corner with dissolve
         "Рядом со мной был только Варпач."
         R "Как давно я сплю?"
         V "Не могу точно сказать, сам подошел только к середине."
@@ -296,12 +308,13 @@ label Chapter_3:
         "Но все хорошое и плохое, рано или поздно кончается."
         "Пора идти на следующую пару."
         "На сегодня она была последней."
-        hide Varpach with dissolve
+        hide Varpach Stand with dissolve
         "Варпач первым подорвался и вышел из кабинета, оставляя меня в одиночестве."
         "Скоро кабинет наполнится новой партией студентов."
     else:
         "Отдалённый звонок заставил сознание вздрогнуть."
         "Сон был прерван."
+        scene bg EmptyMathClass with fade
         "Глаза открылись, а передо мной совершенно пустой кабинет."
         "Похоже все ушли, а про меня забыли."
         "Даже как-то грустно."
@@ -316,11 +329,15 @@ label Chapter_3:
     "..."
     "Передо мной разворачивалась картина маслом."
     "Какой-то парень донимал Игорину."
+    show Igorina Shy at left_corner with dissolve
     "Кулаки даже инстинктивно сжались, брови нахмурились."
     "Как дальше развивался диалог я не услышал."
     "Погрузился в собственные мысли."
+    show Serega Base at right_corner with dissolve
     S "Эй, деваха, ты же знаешь, да?"
     S "Очки носить это только для этих - леваков!"
     S "Ты что, из этих, да? Ты?"
     "Этот силач{cps=5}...{/cps} {sc}Серега!" with hpunch
+    "(КОНЕЦ 3 ГЛАВЫ)"
+    show Serega Base at right_corner with dissolve
 
