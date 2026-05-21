@@ -362,7 +362,8 @@ label Chapter_3:
 
 
     # МИНИ-ИГРА 
-    stop music fadeout 1.0
+    stop music fadeout 30.0
+    call screen typing_minigame(text_to_type)
     scene black with fade
     "Последнее, что уловил мой слух."
     "Какие-то разговоры про цикличность, день сурка, повторы и возвращения."
@@ -500,6 +501,7 @@ label Save_Igorina_From_Serega:
                 jump Run_With_Igorina
 
 label Ending_Death:
+    stop music
     "Инстинкты самосохранения подсказывали мне бежать, но разве можно такое терпеть?"
     # тихая музыка распрыжки юджи
     "Я начал распрыжку с одной ноги на другую, слегка разминая руки."
