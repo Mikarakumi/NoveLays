@@ -18,13 +18,13 @@ screen typing_minigame(goal_text):
     default typed_text = ""
     
     # Таймер засыпания
-    timer 12.0 action Return(typed_text)
-    
+    timer 45.0 action If(typed_text == "", Return(("", 0)), Return((typed_text, calculate_accuracy(goal_text, typed_text))))
+
     # Визуальное потемнение
     add Solid("#000") at transform:
         alpha 0.0
-        linear 12.0 alpha 1.0
-    
+        linear 45.0 alpha 1.0
+     
     vbox:
         align (0.5, 0.4)
         spacing 20
@@ -44,6 +44,6 @@ screen typing_minigame(goal_text):
                 size 34
                 color "#ffff00"
                 length len(goal_text)
-                action Return(typed_text) 
-
+                action Return((typed_text, calculate_accuracy(goal_text, typed_text)))
+                
     text "Нажимайте Enter, когда закончите (если успеете)..." align(0.5, 0.9) size 16 italic True
