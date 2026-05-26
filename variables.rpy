@@ -58,6 +58,10 @@ image bg Floor b = im.Blur("Backgrounds/Floor.png", 2)
 image bg EyeRuslanRoom = im.Blur("Backgrounds/EyeRuslanRoom.jpg", 3)
 image bg MathClass = "Backgrounds/MathClass.png"
 image bg EmptyMathClass = "Backgrounds/EmptyMathClass.png"
+image bg OutOfMetro = "images/Backgrounds/out_of_metro0.png"
+image bg NotebookMinigame = "images/Backgrounds/notebook_writing.png"
+image bg TruckDeath = "images/Backgrounds/truck0.png"
+image bg ExitCollege = "images/Backgrounds/ExitCollege0.png"
 
 # Audio
 
@@ -87,3 +91,4 @@ define audio.dtp = "audio/zvuk-avariya-avto.mp3"
 define audio.point = "audio/vzmax_ruki.mp3"
 define audio.tug = "audio/bed-sheet-movement_fytz-wvu.mp3"
 define audio.motorcycle = "audio/motoc-mimo.mp3"
+define audio.VarpachFM = "audio/Kavkaz_Starly_Kavkaz_Instagram_Version_Reverblaster_Kavkaz_TikTok.mp3"
